@@ -1,0 +1,209 @@
+package com.example.workingwitheverything;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import android.content.Context;
+import android.graphics.Point;
+import android.view.Display;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+
+public class BallSprite {
+	private double moveX = 0;
+	private double moveY = 0;
+	private double velocityDegrade = 1;
+	private double radius = 10;
+	private ImageView ball;
+	
+	private double screenSizeX;
+	private double screenSizeY;
+	
+	private Display userDevice;
+	
+	public BallSprite(RelativeLayout rLayout, Context context) {
+		
+		ball = new ImageView(context);
+		
+		ViewGroup.LayoutParams tempParam = new ViewGroup.LayoutParams((int)(radius * 2), (int)(radius * 2));
+		ball.setLayoutParams(tempParam); 
+		
+		rLayout.addView(ball);
+		
+		ball.setImageResource(R.drawable.ball);
+
+		ball.setX(50 + 5);
+		ball.setY(50 + 65);
+		
+		WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+		userDevice = wm.getDefaultDisplay();
+		Point tempPoint = new Point();
+		userDevice.getSize(tempPoint);
+		
+		screenSizeX = tempPoint.x;
+		screenSizeY = tempPoint.y;
+		
+	}
+	
+	public void move(List<Object_Wall> walls) {
+		
+		ball.setX((float)(ball.getX() + moveX));
+		ball.setY((float)(ball.getY() + moveY));
+		
+		squareCollide();
+		isCollisionWall(walls);
+		
+		moveX *= velocityDegrade;
+		moveY *= velocityDegrade;
+	}
+	
+	public void updateMove(Point Finger) {
+		
+		moveX += ((double)ball.getX() - (double)Finger.x) / 25.0;
+		moveY += ((double)ball.getY() - (double)Finger.y) / 25.0;
+	}
+	
+	public void resetBall(Point StartingPoint) {
+		
+		moveX = 0;
+		moveY = 0;
+		
+		ball.setX(StartingPoint.x);
+		ball.setY(StartingPoint.y);
+	}
+	
+	public int getWidth() {
+		
+		int width = ball.getWidth();
+		
+		return width;
+	}
+	
+	public int getHeight() {
+		
+		int height = ball.getHeight();
+		
+		return height;
+	}
+	
+	public boolean isMoving() {
+		
+		boolean moving = true;
+		if ((int)moveX == 0 && (int)moveY == 0) {
+			moving = false;
+		}
+		
+		return moving;
+	}
+	
+	private void squareCollide() {
+		
+		if (ball.getX() + moveX < 5.0 || ball.getX() + moveX > screenSizeX - ball.getWidth() - 5) {
+			
+			moveX *= -1;
+			
+		}
+		
+		if (ball.getY() + moveY < 65.0 || ball.getY() + moveY > screenSizeY - ball.getHeight() - 5) {
+			
+			moveY *= -1;
+			
+		}
+		
+	}
+	
+	private void isCollisionWall(List<Object_Wall> walls) {
+		
+		for (Object_Wall triedWall: walls) {
+			
+			List<Point> wallsCollide = new ArrayList<Point>();
+			wallsCollide.add(triedWall.getULBound());
+			wallsCollide.add(triedWall.getBRBound());
+
+			
+			if (ball.getY() + radius > wallsCollide.get(0).y && ball.getX() + radius > wallsCollide.get(0).x && Math.sqrt(Math.pow(wallsCollide.get(0).y - (ball.getY() + radius), 2) + Math.pow(wallsCollide.get(0).x - (ball.getX() + radius), 2)) < radius ) {
+				
+				double moveTemp = moveX;
+				moveX = moveY;
+				moveY = moveTemp;
+				
+			} else if (ball.getY() + radius < wallsCollide.get(0).y && ball.getX() + radius > wallsCollide.get(0).x && ball.getX() + radius < wallsCollide.get(1).x && Math.abs(wallsCollide.get(0).y - (ball.getY() + radius)) < radius) {
+				
+				moveY *= -1;
+				
+			} else if (ball.getY() + radius > wallsCollide.get(0).y && ball.getX() + radius > wallsCollide.get(1).x && Math.sqrt(Math.pow(wallsCollide.get(0).y - (ball.getY() + radius), 2) + Math.pow(wallsCollide.get(1).x - (ball.getX() + radius), 2)) < radius) {
+				
+				double moveTemp = moveX;
+				moveX = moveY;
+				moveY = moveTemp;
+				
+			} else if (ball.getY() + radius < wallsCollide.get(0).y && ball.getY() + radius > wallsCollide.get(1).y && ball.getX() + radius > wallsCollide.get(1).x && Math.abs(wallsCollide.get(1).x - (ball.getX() + radius)) < radius) { 
+				
+				moveX *= -1;
+				
+			} else if (ball.getY() + radius > wallsCollide.get(1).y && ball.getX() + radius > wallsCollide.get(1).x && Math.sqrt(Math.pow(wallsCollide.get(1).y - (ball.getY() + radius), 2) + Math.pow(wallsCollide.get(1).x - (ball.getX() + radius), 2)) < radius) {
+				
+				double moveTemp = moveX;
+				moveX = moveY;
+				moveY = moveTemp;
+				
+			} else if (ball.getY() + radius > wallsCollide.get(1).y && ball.getX() + radius > wallsCollide.get(0).x && ball.getX() + radius < wallsCollide.get(1).x && Math.abs(wallsCollide.get(1).y - (ball.getY() + radius)) < radius) { 
+				
+				moveY *= -1;
+				
+			} else if (ball.getY() + radius > wallsCollide.get(1).y && ball.getX() + radius < wallsCollide.get(0).x && Math.sqrt(Math.pow(wallsCollide.get(1).y - (ball.getY() + radius), 2) + Math.pow(wallsCollide.get(0).x - (ball.getX() + radius), 2)) < radius) {
+				
+				double moveTemp = moveX;
+				moveX = moveY;
+				moveY = moveTemp;
+				
+			} else if (ball.getY() + radius < wallsCollide.get(0).y && ball.getY() + radius > wallsCollide.get(1).y && ball.getX() + radius < wallsCollide.get(0).x && Math.abs(wallsCollide.get(0).x - (ball.getX() + radius)) < radius) {
+				
+				moveX *= -1;
+				
+			}
+			
+			
+			/*
+			if (ball.getY() + radius < wallsCollide.get(0).y && ball.getX() + radius > wallsCollide.get(0).x && ball.getX() + radius < wallsCollide.get(1).x) {
+				
+				moveY *= -1;
+				
+			} 
+			if (ball.getY() + radius < wallsCollide.get(0).y && ball.getY() + radius > wallsCollide.get(1).y && ball.getX() + radius > wallsCollide.get(1).x) { 
+				
+				moveX *= -1;
+				
+			} 
+			if (ball.getY() + radius > wallsCollide.get(1).y && ball.getX() + radius > wallsCollide.get(0).x && ball.getX() + radius < wallsCollide.get(1).x) { 
+				
+				moveY *= -1;
+				
+			} 
+			if (ball.getY() + radius < wallsCollide.get(0).y && ball.getY() + radius > wallsCollide.get(1).y && ball.getX() + radius < wallsCollide.get(0).x) {
+				
+				moveX *= -1;
+				
+			}
+			*/
+			
+			/*
+			 * wallsCollide.get(0).y - (ball.getY() + radius) < radius
+			 * (ball.getX() + radius) - wallsCollide.get(1).x < radius
+			 * (ball.getY() + radius) - wallsCollide.get(1).y < radius
+			 * wallsCollide.get(0).x - (ball.getX() + radius) < radius
+			 */
+			/*
+			 * (ball.getY() + radius < wallsCollide.get(0).y && ball.getX() + radius > wallsCollide.get(0).x && ball.getX() + radius < wallsCollide.get(1).y && wallsCollide.get(0).y - (ball.getY() + radius) < radius)
+			if (ball.getY() + radius < wallsCollide.get(0).y && ball.getX() + radius > wallsCollide.get(0).x && ball.getX() + radius < wallsCollide.get(1).x && Math.abs(wallsCollide.get(0).y - (ball.getY() + radius)) < radius) {
+				
+				moveY *= -1;
+				// && wallsCollide.get(0).y - (ball.getY() + radius) < radius
+			}
+			*/
+		}
+	}
+}
