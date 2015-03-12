@@ -140,7 +140,7 @@ public class BallSprite {
 				moveX = moveY;
 				moveY = moveTemp;
 				
-			} else if (ball.getY() + radius < wallsCollide.get(0).y && ball.getY() + radius > wallsCollide.get(1).y && ball.getX() + radius > wallsCollide.get(1).x && Math.abs(wallsCollide.get(1).x - (ball.getX() + radius)) < radius) { 
+			} else if (ball.getY() + radius > wallsCollide.get(0).y && ball.getY() + radius < wallsCollide.get(1).y && ball.getX() + radius > wallsCollide.get(1).x && Math.abs(wallsCollide.get(1).x - (ball.getX() + radius)) < radius) { 
 				
 				moveX *= -1;
 				
@@ -160,50 +160,11 @@ public class BallSprite {
 				moveX = moveY;
 				moveY = moveTemp;
 				
-			} else if (ball.getY() + radius < wallsCollide.get(0).y && ball.getY() + radius > wallsCollide.get(1).y && ball.getX() + radius < wallsCollide.get(0).x && Math.abs(wallsCollide.get(0).x - (ball.getX() + radius)) < radius) {
+			} else if (ball.getY() + radius > wallsCollide.get(0).y && ball.getY() + radius < wallsCollide.get(1).y && ball.getX() + radius < wallsCollide.get(0).x && Math.abs(wallsCollide.get(0).x - (ball.getX() + radius)) < radius) {
 				
 				moveX *= -1;
 				
 			}
-			
-			
-			/*
-			if (ball.getY() + radius < wallsCollide.get(0).y && ball.getX() + radius > wallsCollide.get(0).x && ball.getX() + radius < wallsCollide.get(1).x) {
-				
-				moveY *= -1;
-				
-			} 
-			if (ball.getY() + radius < wallsCollide.get(0).y && ball.getY() + radius > wallsCollide.get(1).y && ball.getX() + radius > wallsCollide.get(1).x) { 
-				
-				moveX *= -1;
-				
-			} 
-			if (ball.getY() + radius > wallsCollide.get(1).y && ball.getX() + radius > wallsCollide.get(0).x && ball.getX() + radius < wallsCollide.get(1).x) { 
-				
-				moveY *= -1;
-				
-			} 
-			if (ball.getY() + radius < wallsCollide.get(0).y && ball.getY() + radius > wallsCollide.get(1).y && ball.getX() + radius < wallsCollide.get(0).x) {
-				
-				moveX *= -1;
-				
-			}
-			*/
-			
-			/*
-			 * wallsCollide.get(0).y - (ball.getY() + radius) < radius
-			 * (ball.getX() + radius) - wallsCollide.get(1).x < radius
-			 * (ball.getY() + radius) - wallsCollide.get(1).y < radius
-			 * wallsCollide.get(0).x - (ball.getX() + radius) < radius
-			 */
-			/*
-			 * (ball.getY() + radius < wallsCollide.get(0).y && ball.getX() + radius > wallsCollide.get(0).x && ball.getX() + radius < wallsCollide.get(1).y && wallsCollide.get(0).y - (ball.getY() + radius) < radius)
-			if (ball.getY() + radius < wallsCollide.get(0).y && ball.getX() + radius > wallsCollide.get(0).x && ball.getX() + radius < wallsCollide.get(1).x && Math.abs(wallsCollide.get(0).y - (ball.getY() + radius)) < radius) {
-				
-				moveY *= -1;
-				// && wallsCollide.get(0).y - (ball.getY() + radius) < radius
-			}
-			*/
 		}
 	}
 }
