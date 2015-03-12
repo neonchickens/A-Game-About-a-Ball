@@ -1,0 +1,47 @@
+package com.example.workingwitheverything;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import android.content.Context;
+import android.graphics.Color;
+import android.graphics.Point;
+import android.view.ViewGroup;
+import android.view.ViewGroup.LayoutParams;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+
+public class Object_Wall {
+	
+	private ImageView wall;
+	
+	public Object_Wall(int xLoc, int yLoc, int xSize, int ySize, RelativeLayout rLayout, Context context) {
+		
+		wall = new ImageView(context);
+		
+		ViewGroup.LayoutParams tempParam = new ViewGroup.LayoutParams(xSize, ySize);
+		wall.setLayoutParams(tempParam); 
+		
+		rLayout.addView(wall);
+		
+		wall.setX(xLoc + 5);
+		wall.setY(yLoc + 65);
+		wall.setBackgroundColor(Color.rgb(255, 102, 0));
+
+	}
+	
+	public Point getULBound() {
+		
+		Point topLeft = new Point((int)wall.getX(), (int)wall.getY());
+		
+		return topLeft;
+	}
+	
+	public Point getBRBound() {
+		
+		Point botRight = new Point((int)wall.getX() + wall.getWidth(), (int)wall.getY() + wall.getHeight());
+		
+		return botRight;
+	}
+
+}
