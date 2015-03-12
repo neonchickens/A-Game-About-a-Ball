@@ -1,0 +1,236 @@
+package com.example.workingwitheverything;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Point;
+import android.graphics.drawable.BitmapDrawable;
+import android.os.Bundle;
+import android.os.Handler;
+import android.view.Display;
+import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
+
+public class MainActivity extends Activity {
+	
+	RelativeLayout container;
+	
+	List<Object_Wall> walls;
+	List<Point> pntFingers;
+	List<ImageView> imgTouchPoints;
+
+	BallSprite bsPlayer;
+
+	Handler hndlMove;
+	Runnable rnblMove;
+	
+	int intCountTilStop = 0;
+	int countFingers = 0;
+	
+	boolean pause = false;
+	boolean blnMovementStart = false;
+	int intMovementStart = 0;
+	
+	@SuppressWarnings("deprecation")
+	@Override //This happens when the application opens
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		
+		/*
+		 * 
+		 * This runs when the application
+		 * Removes title bar, initializes necessary variables
+		 * Runnable located with in
+		 * 
+		 */
+		
+		//Gets rid of title bar
+	    this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+	    this.getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+		
+	    //Pulls up main screen
+	    setContentView(R.layout.activity_main);
+	    
+	    //Reference to the layout
+	    container = (RelativeLayout) findViewById(R.id.lyotMain);
+	    
+		//The player's image
+		bsPlayer = new BallSprite(container, this);
+		
+		//Walls go here
+		walls = new ArrayList<Object_Wall>();
+		Object_Wall temp = new Object_Wall(100, 100, 500, 100, container, this);
+		walls.add(temp);
+		
+        Paint paint = new Paint();
+        paint.setColor(Color.parseColor("#696969"));
+    	Display userDevice;
+		WindowManager wm = (WindowManager) this.getSystemService(Context.WINDOW_SERVICE);
+		userDevice = wm.getDefaultDisplay();
+		Point tempPoint = new Point();
+		userDevice.getSize(tempPoint);
+        Bitmap bg = Bitmap.createBitmap(tempPoint.x, tempPoint.y, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bg); 
+        canvas.drawRect(5,65,tempPoint.x - 5,tempPoint.y - 5, paint); 
+        container.setBackground(new BitmapDrawable(bg));  
+		
+		//Must be initialized
+		hndlMove = new Handler();
+		pntFingers = new ArrayList<Point>();
+		imgTouchPoints = new ArrayList<ImageView>();
+		
+		//Android style timer
+		rnblMove = new Runnable() {
+			public void run() {
+
+				bsPlayer.move(walls);
+				
+				//Player moves x amount of times, then stops
+				if (intCountTilStop < 50) {
+					
+					intCountTilStop += 1;
+					hndlMove.postDelayed(rnblMove, 0);
+					
+				} else {
+					
+					//Resets and stops
+					intCountTilStop = 0;	
+					
+					try {
+						countFingers += 1;
+
+						//Recalculates movement based on new point
+						bsPlayer.updateMove(pntFingers.get(countFingers));
+						
+						hndlMove.postDelayed(rnblMove, 0);
+					
+					} catch (Exception e) {
+						
+						if (bsPlayer.isMoving()) {
+							bsPlayer.move(walls);
+							intCountTilStop -= 1;
+							hndlMove.postDelayed(rnblMove, 0);
+						} else {
+							Button btnPlayPause = (Button) findViewById(R.id.btnPlayPause);
+							btnPlayPause.setText("<<");
+						
+							countFingers = 0;
+							intMovementStart = 2;
+							pause = false;
+						}
+					}
+				}
+			}
+		};
+	}
+
+	//Starts the chain reaction, also calculates the first point
+	public void onClickPlayPause(View v) {
+		
+		Button btnPlayPause = (Button) findViewById(R.id.btnPlayPause);
+		
+		if (intMovementStart == 0) {
+			//Calls sub to do my calculations 
+			bsPlayer.updateMove(pntFingers.get(countFingers));
+			hndlMove.postDelayed(rnblMove, 0);
+			intMovementStart = 1;
+			btnPlayPause.setText("||");
+		} else if (intMovementStart == 1) {
+			if (pause == false) {
+				hndlMove.removeCallbacks(rnblMove);
+				pause = true;
+				btnPlayPause.setText(">");
+			} else {
+				hndlMove.postDelayed(rnblMove, 0);
+				pause = false;
+				btnPlayPause.setText("||");
+			}
+		} else if (intMovementStart == 2) {
+			bsPlayer.resetBall(new Point(150, 150));
+			intMovementStart = 0;
+			pause = false;
+			countFingers = 0;
+			btnPlayPause.setText(">");
+		}
+		
+	}
+	
+	//Resets all points on the form
+	public void onClickReset(View v) {
+		
+		pntFingers.clear();
+		countFingers = 0;
+		
+		bsPlayer.resetBall(new Point(150, 150));
+		intMovementStart = 0;
+		pause = false;
+
+		for (int CountPoints = imgTouchPoints.size() - 1; CountPoints >= 0; CountPoints -= 1) {
+			container.removeView(imgTouchPoints.get(CountPoints));
+			imgTouchPoints.remove(CountPoints);
+		}
+	}
+	
+	//Deletes one from the list of current points
+	public void onClickUndo(View v) {
+		
+		container.removeView(imgTouchPoints.get(imgTouchPoints.size() -1));
+		imgTouchPoints.remove(imgTouchPoints.size() - 1);
+		pntFingers.remove(pntFingers.size() - 1);
+		
+	}
+	
+	//All events in here happen on touch
+	public boolean onTouchEvent(MotionEvent event) {
+		
+		//I use these lines to test point accuracy
+		//imgPlayer.setX((int)(event.getX() + offsetX));
+		//imgPlayer.setY((int)(event.getY() + offsetY));
+		
+		//Triggered when finger is released from the screen
+		if (event.getAction() == MotionEvent.ACTION_UP) {
+			
+			//Adds point info to list of points to push away from
+			Point temp = new Point();
+			temp.x = (int)(event.getX() - ((bsPlayer.getWidth()) / 2));
+			temp.y = (int)(event.getY() - ((bsPlayer.getHeight()) / 2));
+			pntFingers.add(temp);
+
+			//New point to be added to the form
+			//This point is as to where the ball will push away from
+			ImageView imgTouchPoint = new ImageView(this);
+			
+			//Gives layout parameters to the newly declared image
+			ViewGroup.LayoutParams tempParam = new ViewGroup.LayoutParams(5,5);
+			imgTouchPoint.setLayoutParams(tempParam);  
+			
+			//Adds it to the form
+			container.addView(imgTouchPoint);
+			
+			//Gives it the image (currently black)
+			imgTouchPoint.setImageResource(R.drawable.touch_point);
+			
+			//Sets it to where the user has touched
+			imgTouchPoint.setX(event.getX());
+			imgTouchPoint.setY(event.getY());
+			
+			//Adds to the list of points
+			imgTouchPoints.add(imgTouchPoint);
+		}
+		
+		return true;
+	}
+}
+
