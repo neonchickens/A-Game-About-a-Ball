@@ -26,14 +26,6 @@ public class LevelDesign {
 			
 			break;
 		}
-		
-		bsPlayer = bsPlayerTemp;
-		/*
-		 * TODO
-		 * ARRAY PASS?
-		 * 
-		 */
-		owLevel = owLevelTemp;
 	}
 	
 	public BallSprite getBallSprite() {
