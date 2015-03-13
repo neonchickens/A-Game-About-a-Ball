@@ -16,17 +16,21 @@ public class BallSprite {
 	private double moveX = 0;
 	private double moveY = 0;
 	private double velocityDegrade = 1;
-	private double radius = 10;
+	private double radius;
 	private ImageView ball;
 	
 	private double screenSizeX;
 	private double screenSizeY;
 	
+	private int xOffset = 5, yOffset = 65;
+	
 	private Display userDevice;
 	
-	public BallSprite(RelativeLayout rLayout, Context context) {
+	public BallSprite(RelativeLayout rLayout, Context context, int xLoc, int yLoc, int tempRadius) {
 		
 		ball = new ImageView(context);
+		
+		radius = tempRadius;
 		
 		ViewGroup.LayoutParams tempParam = new ViewGroup.LayoutParams((int)(radius * 2), (int)(radius * 2));
 		ball.setLayoutParams(tempParam); 
@@ -35,8 +39,8 @@ public class BallSprite {
 		
 		ball.setImageResource(R.drawable.ball);
 
-		ball.setX(50 + 5);
-		ball.setY(50 + 65);
+		ball.setX(xLoc + xOffset);
+		ball.setY(yLoc + yOffset);
 		
 		WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
 		userDevice = wm.getDefaultDisplay();
