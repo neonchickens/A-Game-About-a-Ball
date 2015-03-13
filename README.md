@@ -1,3 +1,2 @@
-# AGameAboutABall
-Luke was here
-The 2015 android team from BCTC was asigned to create a educational program for K-12, and this is our project. We've created an interactive reasoning game to teach children prediction and aim, and ourselves to program.
+# A Game About a Ball
+This project is a Android game developed for the PA High School Compter Fair. It is aimed for all kids grades K-12, but is aimed to focus on improving prediction and spacial reasoning skills. 
