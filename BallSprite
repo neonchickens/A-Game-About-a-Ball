@@ -22,11 +22,14 @@ public class BallSprite {
 	private double screenSizeX;
 	private double screenSizeY;
 	
+	private int xSpawn;
+	private int ySpawn;
+	
 	private int xOffset = 5, yOffset = 65;
 	
 	private Display userDevice;
 	
-	public BallSprite(RelativeLayout rLayout, Context context, int xLoc, int yLoc, int tempRadius) {
+	public BallSprite(RelativeLayout rLayout, Context context, int xLoc, int yLoc, int xSpawn, int ySpawn, int tempRadius) {
 		
 		ball = new ImageView(context);
 		
@@ -70,13 +73,13 @@ public class BallSprite {
 		moveY += ((double)ball.getY() - (double)Finger.y) / 25.0;
 	}
 	
-	public void resetBall(Point StartingPoint) {
+	public void resetBall() {
 		
 		moveX = 0;
 		moveY = 0;
 		
-		ball.setX(StartingPoint.x);
-		ball.setY(StartingPoint.y);
+		ball.setX(xSpawn);
+		ball.setY(ySpawn);
 	}
 	
 	public int getWidth() {
@@ -171,4 +174,5 @@ public class BallSprite {
 			}
 		}
 	}
+	
 }
