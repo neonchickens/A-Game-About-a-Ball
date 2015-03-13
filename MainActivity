@@ -32,6 +32,7 @@ public class MainActivity extends Activity {
 	List<ImageView> imgTouchPoints;
 
 	BallSprite bsPlayer;
+	ObjectWallFinale owfTrophy;
 
 	Handler hndlMove;
 	Runnable rnblMove;
@@ -76,9 +77,10 @@ public class MainActivity extends Activity {
 		walls.add(temp);
 		*/
 	    
-	    LevelDesign ldActiveGame = new LevelDesign(0, container, this, bsPlayer, owLevel);
+	    LevelDesign ldActiveGame = new LevelDesign(0, container, this);
 	    bsPlayer = ldActiveGame.getBallSprite();
 	    owLevel = ldActiveGame.getLevel();
+	    owfTrophy = ldActiveGame.getFinale();
 		
         Paint paint = new Paint();
         paint.setColor(Color.parseColor("#696969"));
@@ -101,7 +103,9 @@ public class MainActivity extends Activity {
 		rnblMove = new Runnable() {
 			public void run() {
 
-				bsPlayer.move(owLevel);
+				bsPlayer.move();
+				boolean win = bsPlayer.isCollidingWall(owLevel, owfTrophy);
+				//TODO Create win event
 				
 				//Player moves x amount of times, then stops
 				if (intCountTilStop < 50) {
@@ -125,7 +129,8 @@ public class MainActivity extends Activity {
 					} catch (Exception e) {
 						
 						if (bsPlayer.isMoving()) {
-							bsPlayer.move(owLevel);
+							bsPlayer.move();
+							win = bsPlayer.isCollidingWall(owLevel, owfTrophy);
 							intCountTilStop -= 1;
 							hndlMove.postDelayed(rnblMove, 0);
 						} else {
@@ -164,7 +169,7 @@ public class MainActivity extends Activity {
 				btnPlayPause.setText("||");
 			}
 		} else if (intMovementStart == 2) {
-			bsPlayer.resetBall(new Point(150, 150));
+			bsPlayer.resetBall();
 			intMovementStart = 0;
 			pause = false;
 			countFingers = 0;
@@ -179,7 +184,7 @@ public class MainActivity extends Activity {
 		pntFingers.clear();
 		countFingers = 0;
 		
-		bsPlayer.resetBall(new Point(150, 150));
+		bsPlayer.resetBall();
 		intMovementStart = 0;
 		pause = false;
 
@@ -239,5 +244,3 @@ public class MainActivity extends Activity {
 		return true;
 	}
 }
-
-
