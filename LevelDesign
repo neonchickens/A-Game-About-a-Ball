@@ -11,18 +11,16 @@ public class LevelDesign {
 	private BallSprite bsPlayer;
 	private List<Object_Wall> owLevel;
 	
-	public LevelDesign(int levelNumber, RelativeLayout rLayout, Context context, BallSprite bsPlayerTemp, List<Object_Wall> owLevelTemp) {
+	public LevelDesign(int levelNumber, RelativeLayout rLayout, Context context) {
 		
 		switch (levelNumber) {
 		case 0:
 			
-			bsPlayer = new BallSprite(rLayout, context, 50, 50, 10);
+			bsPlayer = new BallSprite(rLayout, context, 50, 50, 50, 50, 10);
 			
+			owLevel = new ArrayList<Object_Wall>();
 			owLevel.add(new Object_Wall(100, 100, 100, 100, rLayout, context));
 			owLevel.add(new Object_Wall(300, 100, 100, 100, rLayout, context));
-			
-			break;
-		case 1:
 			
 			break;
 		}
