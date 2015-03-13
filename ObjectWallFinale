@@ -1,0 +1,13 @@
+package com.example.workingwitheverything;
+
+import android.content.Context;
+import android.graphics.Color;
+import android.widget.RelativeLayout;
+
+public class ObjectWallFinale extends Object_Wall {
+
+	public ObjectWallFinale(int xLoc, int yLoc, int xSize, int ySize, RelativeLayout rLayout, Context context) {
+		super(xLoc, yLoc, xSize, ySize, rLayout, context);
+		wall.setBackgroundColor(Color.rgb(230, 255, 0));
+	}
+}
