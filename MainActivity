@@ -27,7 +27,7 @@ public class MainActivity extends Activity {
 	
 	RelativeLayout container;
 	
-	List<Object_Wall> walls;
+	List<Object_Wall> owLevel;
 	List<Point> pntFingers;
 	List<ImageView> imgTouchPoints;
 
@@ -67,12 +67,18 @@ public class MainActivity extends Activity {
 	    container = (RelativeLayout) findViewById(R.id.lyotMain);
 	    
 		//The player's image
-		bsPlayer = new BallSprite(container, this);
+		//bsPlayer = new BallSprite(container, this);
 		
 		//Walls go here
-		walls = new ArrayList<Object_Wall>();
+		
+	    /*walls = new ArrayList<Object_Wall>();
 		Object_Wall temp = new Object_Wall(100, 100, 500, 100, container, this);
 		walls.add(temp);
+		*/
+	    
+	    LevelDesign ldActiveGame = new LevelDesign(0, container, this, bsPlayer, owLevel);
+	    bsPlayer = ldActiveGame.getBallSprite();
+	    owLevel = ldActiveGame.getLevel();
 		
         Paint paint = new Paint();
         paint.setColor(Color.parseColor("#696969"));
@@ -95,7 +101,7 @@ public class MainActivity extends Activity {
 		rnblMove = new Runnable() {
 			public void run() {
 
-				bsPlayer.move(walls);
+				bsPlayer.move(owLevel);
 				
 				//Player moves x amount of times, then stops
 				if (intCountTilStop < 50) {
@@ -119,7 +125,7 @@ public class MainActivity extends Activity {
 					} catch (Exception e) {
 						
 						if (bsPlayer.isMoving()) {
-							bsPlayer.move(walls);
+							bsPlayer.move(owLevel);
 							intCountTilStop -= 1;
 							hndlMove.postDelayed(rnblMove, 0);
 						} else {
@@ -233,4 +239,5 @@ public class MainActivity extends Activity {
 		return true;
 	}
 }
+
 
