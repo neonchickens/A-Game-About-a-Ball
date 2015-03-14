@@ -34,8 +34,15 @@ public class Object_Wall {
 	public boolean isCollisionWall(Point ball, int xMove, int yMove) {
 		
 		boolean collide = false;
+		int hypotenuse = 0;
+		
+		if (xMove == 0) {
+			hypotenuse = yMove;
+		} else {
+			hypotenuse = yMove / xMove;
+		}
 
-			if (ball.y > wall.getY() && ball.x > wall.getX() && Math.sqrt(Math.pow(wall.getY() - (ball.y), 2) + Math.pow(wall.getX() - (ball.x), 2)) < Math.abs(yMove / xMove)) {
+			if (ball.y > wall.getY() && ball.x > wall.getX() && Math.sqrt(Math.pow(wall.getY() - (ball.y), 2) + Math.pow(wall.getX() - (ball.x), 2)) < Math.abs(hypotenuse)) {
 				
 				sectorOfCollision = 1;
 				collide = true;
@@ -45,7 +52,7 @@ public class Object_Wall {
 				sectorOfCollision = 2;
 				collide = true;
 				
-			} else if (ball.y > wall.getY() && ball.x > (wall.getX() + wall.getWidth()) && Math.sqrt(Math.pow(wall.getY() - (ball.y), 2) + Math.pow((wall.getX() + wall.getWidth()) - (ball.x), 2)) < Math.abs(yMove / xMove)) {
+			} else if (ball.y > wall.getY() && ball.x > (wall.getX() + wall.getWidth()) && Math.sqrt(Math.pow(wall.getY() - (ball.y), 2) + Math.pow((wall.getX() + wall.getWidth()) - (ball.x), 2)) < Math.abs(hypotenuse)) {
 				
 				sectorOfCollision = 3;
 				collide = true;
@@ -55,7 +62,7 @@ public class Object_Wall {
 				sectorOfCollision = 4;
 				collide = true;
 				
-			} else if (ball.y > (wall.getY() + wall.getHeight()) && ball.x > (wall.getX() + wall.getWidth()) && Math.sqrt(Math.pow((wall.getY() + wall.getHeight()) - (ball.y), 2) + Math.pow((wall.getX() + wall.getWidth()) - (ball.x), 2)) < Math.abs(yMove / xMove)) {
+			} else if (ball.y > (wall.getY() + wall.getHeight()) && ball.x > (wall.getX() + wall.getWidth()) && Math.sqrt(Math.pow((wall.getY() + wall.getHeight()) - (ball.y), 2) + Math.pow((wall.getX() + wall.getWidth()) - (ball.x), 2)) < Math.abs(hypotenuse)) {
 				
 				sectorOfCollision = 5;
 				collide = true;
@@ -65,7 +72,7 @@ public class Object_Wall {
 				sectorOfCollision = 6;
 				collide = true;
 				
-			} else if (ball.y > (wall.getY() + wall.getHeight()) && ball.x < wall.getX() && Math.sqrt(Math.pow((wall.getY() + wall.getHeight()) - (ball.y), 2) + Math.pow(wall.getX() - (ball.x), 2)) < Math.abs(yMove / xMove)) {
+			} else if (ball.y > (wall.getY() + wall.getHeight()) && ball.x < wall.getX() && Math.sqrt(Math.pow((wall.getY() + wall.getHeight()) - (ball.y), 2) + Math.pow(wall.getX() - (ball.x), 2)) < Math.abs(hypotenuse)) {
 				
 				sectorOfCollision = 7;
 				collide = true;
