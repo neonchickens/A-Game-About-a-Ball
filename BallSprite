@@ -73,7 +73,7 @@ public class BallSprite {
 		squareCollide();
 		Point pntTemp = new Point((int)(ball.getX() + radius), (int)(ball.getY() + radius));
 		for (Object_Wall triedWall: walls) {
-			if (triedWall.isCollisionWall(pntTemp, (int)moveX, (int)moveY)) {
+			if (triedWall.isCollisionWall(pntTemp, (int)radius, (int)moveX, (int)moveY)) {
 				
 				double moveTemp = 0.0;
 				switch (triedWall.getCollisionSector()) {
@@ -133,7 +133,7 @@ public class BallSprite {
 		}
 		 
 		boolean win = false;
-		if (owfTrophy.isCollisionWall(new Point((int)(ball.getX() + radius), (int)(ball.getY() + radius)), (int)moveX, (int)moveY)) {
+		if (owfTrophy.isCollisionWall(new Point((int)(ball.getX() + radius), (int)(ball.getY() + radius)), (int)radius, (int)moveX, (int)moveY)) {
 			win = true;
 		}
 		
