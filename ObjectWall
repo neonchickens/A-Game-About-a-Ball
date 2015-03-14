@@ -40,7 +40,7 @@ public class Object_Wall {
 				sectorOfCollision = 1;
 				collide = true;
 				
-			} else if (ball.y < wall.getY() && ball.x > wall.getX() && ball.x < (wall.getX() + wall.getWidth()) && Math.abs(wall.getY() - (ball.y)) < yMove) {
+			} else if (ball.y < wall.getY() && ball.x > wall.getX() && ball.x < (wall.getX() + wall.getWidth()) && Math.abs(wall.getY() - (ball.y)) < Math.abs(yMove)) {
 				
 				sectorOfCollision = 2;
 				collide = true;
@@ -50,7 +50,7 @@ public class Object_Wall {
 				sectorOfCollision = 3;
 				collide = true;
 				
-			} else if (ball.y > wall.getY() && ball.y < (wall.getY() + wall.getHeight()) && ball.x > (wall.getX() + wall.getWidth()) && Math.abs((wall.getX() + wall.getWidth()) - (ball.x)) < xMove) { 
+			} else if (ball.y > wall.getY() && ball.y < (wall.getY() + wall.getHeight()) && ball.x > (wall.getX() + wall.getWidth()) && Math.abs((wall.getX() + wall.getWidth()) - (ball.x)) < Math.abs(xMove)) { 
 				
 				sectorOfCollision = 4;
 				collide = true;
@@ -60,7 +60,7 @@ public class Object_Wall {
 				sectorOfCollision = 5;
 				collide = true;
 				
-			} else if (ball.y > (wall.getY() + wall.getHeight()) && ball.x > wall.getX() && ball.x < (wall.getX() + wall.getWidth()) && Math.abs((wall.getY() + wall.getHeight()) - (ball.y)) < yMove) { 
+			} else if (ball.y > (wall.getY() + wall.getHeight()) && ball.x > wall.getX() && ball.x < (wall.getX() + wall.getWidth()) && Math.abs((wall.getY() + wall.getHeight()) - (ball.y)) < Math.abs(yMove)) { 
 				
 				sectorOfCollision = 6;
 				collide = true;
@@ -70,7 +70,7 @@ public class Object_Wall {
 				sectorOfCollision = 7;
 				collide = true;
 				
-			} else if (ball.y > wall.getY() && ball.y < (wall.getY() + wall.getHeight()) && ball.x < wall.getX() && Math.abs(wall.getX() - (ball.x)) < xMove) {
+			} else if (ball.y > wall.getY() && ball.y < (wall.getY() + wall.getHeight()) && ball.x < wall.getX() && Math.abs(wall.getX() - (ball.x)) < Math.abs(xMove)) {
 				
 				sectorOfCollision = 8;
 				collide = true;
