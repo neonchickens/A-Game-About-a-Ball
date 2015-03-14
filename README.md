@@ -4,5 +4,5 @@ This project is a Android game developed for the PA High School Compter Fair. It
 TODO:
 Level Design
 Implement Textures
-Test Git Change 3
+Teach Wes and Drew EGit
 
