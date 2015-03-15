@@ -37,6 +37,14 @@ public class LevelDesign {
 			owLevel.add(new Object_Wall(900, 300, 100, 100, rLayout, context));
 			owLevel.add(new Object_Wall(1100, 300, 100, 100, rLayout, context));
 			
+			//Third layer of six boxes
+			owLevel.add(new Object_Wall(100, 500, 100, 100, rLayout, context));
+			owLevel.add(new Object_Wall(300, 500, 100, 100, rLayout, context));
+			owLevel.add(new Object_Wall(500, 500, 100, 100, rLayout, context));
+			owLevel.add(new Object_Wall(700, 500, 100, 100, rLayout, context));
+			owLevel.add(new Object_Wall(900, 500, 100, 100, rLayout, context));
+			owLevel.add(new Object_Wall(1100, 500, 100, 100, rLayout, context));
+			
 			owfTrophy = new ObjectWallFinale(500, 100, 100, 100, rLayout, context);
 			
 			break;
