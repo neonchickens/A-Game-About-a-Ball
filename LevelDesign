@@ -1,4 +1,4 @@
-package com.example.workingwitheverything;
+package com.example.mobileapp;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,9 +53,11 @@ public class LevelDesign {
 			
 			//Start of level design test 1
 			owLevel.add(new Object_Wall(100, 0, 75, 450, rLayout, context));
+			//owLevel.add(new Object_Wall(0, 0, 1270, 682, rLayout, context));
+			owLevel.add(new Object_Wall(0, 500, 500, 75, rLayout, context));
+			//fuck you github
 			
-			owfTrophy = new ObjectWallFinale(1100, 700, 50, 50, rLayout, context);
-			
+			owfTrophy = new ObjectWallFinale(1175, 600, 50, 50, rLayout, context);
 			
 			break;
 		case 1:
