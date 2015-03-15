@@ -18,15 +18,16 @@ public class LevelDesign {
 		//level zero case statement
 		case 0:
 			
-			bsPlayer = new BallSprite(rLayout, context, 50, 50, 50, 50, 10, .99);
+			//bsPlayer = new BallSprite(rLayout, context, 50, 50, 10, .99);
 			
 			owLevel = new ArrayList<Object_Wall>();
 			
-			/**
+			bsPlayer = new BallSprite(rLayout, context, 250, 250, 10, 1);
+
 			//First layer of six boxes
 			owLevel.add(new Object_Wall(100, 100, 100, 100, rLayout, context));
 			owLevel.add(new Object_Wall(300, 100, 100, 100, rLayout, context));
-			owLevel.add(new Object_Wall(500, 100, 100, 100, rLayout, context));
+			//owLevel.add(new Object_Wall(500, 100, 100, 100, rLayout, context));
 			owLevel.add(new Object_Wall(700, 100, 100, 100, rLayout, context));
 			owLevel.add(new Object_Wall(900, 100, 100, 100, rLayout, context));
 			owLevel.add(new Object_Wall(1100, 100, 100, 100, rLayout, context));
@@ -49,22 +50,25 @@ public class LevelDesign {
 			
 			owfTrophy = new ObjectWallFinale(500, 100, 100, 100, rLayout, context);
 			
-			**/
+
 			
 			//owLevel.add(new Object_Wall(0, 0, 1270, 682, rLayout, context));
 			
 			//Start of level design test 1
-			
+			/**
 			//pillars
 			owLevel.add(new Object_Wall(100, 0, 75, 450, rLayout, context));
 			owLevel.add(new Object_Wall(425, 0, 75, 450, rLayout, context));
 			owLevel.add(new Object_Wall(775, 100, 75, 450, rLayout, context));
 			
+			
 			//floor
 			owLevel.add(new Object_Wall(0, 550, 850, 75, rLayout, context));
-			owLevel.add(new Object_Wall(970, 100, 300, 75, rLayout, context));
+			owLevel.add(new Object_Wall(850, 100, 420, 75, rLayout, context));
 			
-			owfTrophy = new ObjectWallFinale(1175, 600, 50, 50, rLayout, context);
+			//Trophy
+			owfTrophy = new ObjectWallFinale(1175, 50, 50, 50, rLayout, context);
+			**/
 			
 			break;
 		case 1:
