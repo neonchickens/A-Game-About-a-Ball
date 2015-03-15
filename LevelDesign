@@ -18,10 +18,11 @@ public class LevelDesign {
 		//level zero case statement
 		case 0:
 			
-			Player = new BallSprite(rLayout, context, 50, 50, 50, 50, 10, .99);
-			/**
+			bsPlayer = new BallSprite(rLayout, context, 50, 50, 50, 50, 10, .99);
+			
 			owLevel = new ArrayList<Object_Wall>();
 			
+			/**
 			//First layer of six boxes
 			owLevel.add(new Object_Wall(100, 100, 100, 100, rLayout, context));
 			owLevel.add(new Object_Wall(300, 100, 100, 100, rLayout, context));
@@ -51,7 +52,7 @@ public class LevelDesign {
 			**/
 			
 			//Start of level design test 1
-			owLevel.add(new Object_Wall(250, 100, 75, 600, rLayout, context);
+			owLevel.add(new Object_Wall(250, 100, 75, 600, rLayout, context));
 			
 			break;
 		case 1:
