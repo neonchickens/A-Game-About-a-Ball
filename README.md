@@ -7,7 +7,7 @@ Level Design
 
 Implement Textures
 
-Teach Wes and Drew EGit.
+Teach Weston and Drew EGit.
 
 Drew was here :3
 
