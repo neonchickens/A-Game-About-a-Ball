@@ -56,7 +56,7 @@ public class LevelDesign {
 			//owLevel.add(new Object_Wall(0, 0, 1270, 682, rLayout, context));
 			owLevel.add(new Object_Wall(0, 500, 500, 75, rLayout, context));
 			//fuck you github
-			
+			//fuck github real fucking hard
 			owfTrophy = new ObjectWallFinale(1175, 600, 50, 50, rLayout, context);
 			
 			break;
