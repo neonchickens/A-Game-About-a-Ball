@@ -15,13 +15,27 @@ public class LevelDesign {
 	public LevelDesign(int levelNumber, RelativeLayout rLayout, Context context) {
 		
 		switch (levelNumber) {
+		//level zero case statement
 		case 0:
 			
 			bsPlayer = new BallSprite(rLayout, context, 50, 50, 50, 50, 10, .99);
 			
 			owLevel = new ArrayList<Object_Wall>();
+			//First layer of six boxes
 			owLevel.add(new Object_Wall(100, 100, 100, 100, rLayout, context));
 			owLevel.add(new Object_Wall(300, 100, 100, 100, rLayout, context));
+			owLevel.add(new Object_Wall(500, 100, 100, 100, rLayout, context));
+			owLevel.add(new Object_Wall(700, 100, 100, 100, rLayout, context));
+			owLevel.add(new Object_Wall(900, 100, 100, 100, rLayout, context));
+			owLevel.add(new Object_Wall(1100, 100, 100, 100, rLayout, context));
+			
+			//Second layer of six boxes
+			owLevel.add(new Object_Wall(100, 300, 100, 100, rLayout, context));
+			owLevel.add(new Object_Wall(300, 300, 100, 100, rLayout, context));
+			owLevel.add(new Object_Wall(500, 300, 100, 100, rLayout, context));
+			owLevel.add(new Object_Wall(700, 300, 100, 100, rLayout, context));
+			owLevel.add(new Object_Wall(900, 300, 100, 100, rLayout, context));
+			owLevel.add(new Object_Wall(1100, 300, 100, 100, rLayout, context));
 			
 			owfTrophy = new ObjectWallFinale(500, 100, 100, 100, rLayout, context);
 			
