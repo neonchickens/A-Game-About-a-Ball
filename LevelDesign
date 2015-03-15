@@ -54,9 +54,11 @@ public class LevelDesign {
 			//Start of level design test 1
 			owLevel.add(new Object_Wall(100, 0, 75, 450, rLayout, context));
 			//owLevel.add(new Object_Wall(0, 0, 1270, 682, rLayout, context));
-			owLevel.add(new Object_Wall(0, 500, 500, 75, rLayout, context));
+			owLevel.add(new Object_Wall(0, 550, 850, 75, rLayout, context));
+			owLevel.add(new Object_Wall(425, 0, 75, 450, rLayout, context));
+			owLevel.add(new Object_Wall(725, 0, 75, 450, rLayout, context));
 			//fuck you github
-			//fuck github real fucking hard
+			
 			owfTrophy = new ObjectWallFinale(1175, 600, 50, 50, rLayout, context);
 			
 			break;
