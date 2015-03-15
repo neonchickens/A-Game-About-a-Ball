@@ -62,6 +62,7 @@ public class LevelDesign {
 			
 			//floor
 			owLevel.add(new Object_Wall(0, 550, 850, 75, rLayout, context));
+			owLevel.add(new Object_Wall(970, 100, 300, 75, rLayout, context));
 			
 			owfTrophy = new ObjectWallFinale(1175, 600, 50, 50, rLayout, context);
 			
