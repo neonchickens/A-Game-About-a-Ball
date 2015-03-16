@@ -1,135 +1,296 @@
 package com.example.workingwitheverything;
 
+import java.util.List;
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.Point;
+import android.view.Display;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-public class Object_Wall {
+public class BallSprite {
+	private double moveX = 0;
+	private double moveY = 0;
+	private double velocityDegrade;
+	private double radius;
+	private ImageView ball;
 	
-	protected ImageView wall;
+	private boolean corner = true;
 	
-	private int xOffset = 5;
-	private int yOffset = 65;
+	private double screenSizeX;
+	private double screenSizeY;
 	
-	private boolean blnCollide = false;
+	private int xSpawn;
+	private int ySpawn;
 	
-	protected int sectorOfCollision = 0;
+	private int xOffset = 5, yOffset = 65;
 	
-	public Object_Wall(int xLoc, int yLoc, int xSize, int ySize, RelativeLayout rLayout, Context context) {
+	private Display userDevice;
+	
+	public BallSprite(RelativeLayout rLayout, Context context, int xLoc, int yLoc, int tempRadius, double velocityDegradeTemp) {
 		
-		wall = new ImageView(context);
+		ball = new ImageView(context);
 		
-		ViewGroup.LayoutParams tempParam = new ViewGroup.LayoutParams(xSize, ySize);
-		wall.setLayoutParams(tempParam); 
+		radius = tempRadius;
 		
-		rLayout.addView(wall);
+		ViewGroup.LayoutParams tempParam = new ViewGroup.LayoutParams((int)(radius * 2), (int)(radius * 2));
+		ball.setLayoutParams(tempParam); 
 		
-		wall.setX(xLoc + xOffset);
-		wall.setY(yLoc + yOffset);
-		wall.setBackgroundColor(Color.rgb(250, 175, 75));
+		rLayout.addView(ball);
+		
+		ball.setImageResource(R.drawable.ball);
 
+		xSpawn = (xLoc + xOffset - (int)radius);
+		ySpawn = (yLoc + yOffset - (int)radius);
+		
+		ball.setX(xSpawn);
+		ball.setY(ySpawn);
+		
+		velocityDegrade = velocityDegradeTemp;
+		
+		WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+		userDevice = wm.getDefaultDisplay();
+		Point tempPoint = new Point();
+		userDevice.getSize(tempPoint);
+		
+		screenSizeX = tempPoint.x;
+		screenSizeY = tempPoint.y;
+		
 	}
 	
-	public boolean isCollisionWall(Point ball, int radius, int xMove, int yMove) {
+	public void move() {
+		
+		ball.setX((float)(ball.getX() + moveX));
+		ball.setY((float)(ball.getY() + moveY));
+		
+		
+		
+		moveX *= velocityDegrade;
+		moveY *= velocityDegrade;
+	}
+	
+	public boolean isCollidingWall(List<Object_Wall> walls, ObjectWallFinale owfTrophy) {
+		
+		corner = true;
+		
+		squareCollide();
+		Point pntTemp = new Point((int)(ball.getX() + radius), (int)(ball.getY() + radius));
+		for (Object_Wall triedWall: walls) {
+			if (triedWall.isCollisionWall(pntTemp, (int)radius, (int)moveX, (int)moveY)) {
+				
+				double moveTemp = 0.0;
+				switch (triedWall.getCollisionSector()) {
+				case 1:
+					
+					if (moveX > 0 && moveY > 0) {
+						
+						double newSlope = triedWall.getNewSlope(new Point((int)(ball.getX() + radius), (int)(ball.getY() + radius)), (int)moveX, (int)moveY);
+						double oldHypotenuse = Math.sqrt(Math.pow(moveX, 2) + Math.pow(moveY, 2));
+						moveX = oldHypotenuse / Math.sqrt(Math.pow(newSlope, 2) + 1);
+						moveY = -moveX * newSlope;
 
-			if (ball.y <= wall.getY() && ball.x <= wall.getX() && Math.sqrt(Math.pow(wall.getY() - (ball.y), 2) + Math.pow(wall.getX() - (ball.x), 2)) <= radius) {
-				
-				if (blnCollide) {
-					sectorOfCollision = 1;
+					} else if (moveX < 0 && moveY > 0) {
+						
+						double newSlope = triedWall.getTransfer(new Point((int)(ball.getX() + radius), (int)(ball.getY() + radius)));
+						double oldHypotenuse = Math.sqrt(Math.pow(moveX, 2) + Math.pow(moveY, 2));
+						moveX = oldHypotenuse / Math.sqrt(Math.pow(newSlope, 2) + 1);
+						moveY = -moveX * newSlope;
+					} else if (moveX > 0 && moveY < 0) {
+						
+						double newSlope = triedWall.getTransfer(new Point((int)(ball.getX() + radius), (int)(ball.getY() + radius)));
+						double oldHypotenuse = Math.sqrt(Math.pow(moveX, 2) + Math.pow(moveY, 2));
+						moveX = -oldHypotenuse / Math.sqrt(Math.pow(newSlope, 2) + 1);
+						moveY = -moveX * newSlope;
+					}
+					
+					break;
+				case 2:
+					
+					if (moveY > 0) {
+						moveY *= -1;
+					}
+					
+					break;
+				case 3:
+
+					if (moveX > 0 && moveY < 0) {
+						
+						double newSlope = triedWall.getNewSlope(new Point((int)(ball.getX() + radius), (int)(ball.getY() + radius)), (int)moveX, (int)moveY);
+						double oldHypotenuse = Math.sqrt(Math.pow(moveX, 2) + Math.pow(moveY, 2));
+						moveX = oldHypotenuse / Math.sqrt(Math.pow(newSlope, 2) + 1);
+						moveY = -moveX * newSlope;
+
+					} else if (moveX < 0 && moveY < 0) {
+						
+						double newSlope = triedWall.getTransfer(new Point((int)(ball.getX() + radius), (int)(ball.getY() + radius)));
+						double oldHypotenuse = Math.sqrt(Math.pow(moveX, 2) + Math.pow(moveY, 2));
+						moveX = oldHypotenuse / Math.sqrt(Math.pow(newSlope, 2) + 1);
+						moveY = -moveX * newSlope;
+					} else if (moveX > 0 && moveY > 0) {
+						
+						double newSlope = triedWall.getTransfer(new Point((int)(ball.getX() + radius), (int)(ball.getY() + radius)));
+						double oldHypotenuse = Math.sqrt(Math.pow(moveX, 2) + Math.pow(moveY, 2));
+						moveX = -oldHypotenuse / Math.sqrt(Math.pow(newSlope, 2) + 1);
+						moveY = -moveX * newSlope;
+					}
+					
+					break;
+				case 4:
+					
+					if (moveX < 0) {
+						moveX *= -1;
+					}
+					
+					break;
+				case 5:
+					if (corner){
+						if (moveX < 0 && moveY < 0) {
+							
+							double newSlope = triedWall.getNewSlope(new Point((int)(ball.getX() + radius), (int)(ball.getY() + radius)), (int)moveX, (int)moveY);
+							double oldHypotenuse = Math.sqrt(Math.pow(moveX, 2) + Math.pow(moveY, 2));
+							moveX = oldHypotenuse / Math.sqrt(Math.pow(newSlope, 2) + 1);
+							moveY = -moveX * newSlope;
+
+						} else if (moveX > 0 && moveY <= 0) {
+							
+							double newSlope = triedWall.getTransfer(new Point((int)(ball.getX() + radius), (int)(ball.getY() + radius)));
+							double oldHypotenuse = Math.sqrt(Math.pow(moveX, 2) + Math.pow(moveY, 2));
+							moveX = oldHypotenuse / Math.sqrt(Math.pow(newSlope, 2) + 1);
+							moveY = moveX * newSlope;
+							
+						} else if (moveX <= 0 && moveY > 0) {
+							
+							double newSlope = triedWall.getTransfer(new Point((int)(ball.getX() + radius), (int)(ball.getY() + radius)));
+							double oldHypotenuse = Math.sqrt(Math.pow(moveX, 2) + Math.pow(moveY, 2));
+							moveX = oldHypotenuse / Math.sqrt(Math.pow(newSlope, 2) + 1);
+							moveY = -moveX * newSlope;
+						}
+						
+						corner = false;
+					} else if (triedWall.getColliding()) {
+						corner = true;
+					}
+					
+					
+					break;
+				case 6:
+					
+					if (moveY < 0) {
+						moveY *= -1;
+					}
+					
+					break;
+				case 7:
+
+					
+					double tempXMulti = 0;
+					double tempYMulti = 0;
+					
+					if (moveX < 0 && moveY > 0) {
+						
+						double newSlope = triedWall.getNewSlope(new Point((int)(ball.getX() + radius), (int)(ball.getY() + radius)), (int)moveX, (int)moveY);
+						double oldHypotenuse = Math.sqrt(Math.pow(moveX, 2) + Math.pow(moveY, 2));
+						moveX = oldHypotenuse / Math.sqrt(Math.pow(newSlope, 2) + 1);
+						moveY = -moveX * newSlope;
+
+					} else if (moveX > 0 && moveY > 0) {
+						
+						double newSlope = triedWall.getTransfer(new Point((int)(ball.getX() + radius), (int)(ball.getY() + radius)));
+						double oldHypotenuse = Math.sqrt(Math.pow(moveX, 2) + Math.pow(moveY, 2));
+						
+						tempXMulti = moveX / (oldHypotenuse / Math.sqrt(Math.pow(newSlope, 2) + 1));
+						tempYMulti = moveY / ((-oldHypotenuse / Math.sqrt(Math.pow(newSlope, 2) + 1)) * newSlope);
+						
+						moveX *= tempXMulti;
+						moveY *= tempYMulti;
+						
+					} else if (moveX < 0 && moveY < 0) {
+						
+						double newSlope = triedWall.getTransfer(new Point((int)(ball.getX() + radius), (int)(ball.getY() + radius)));
+						double oldHypotenuse = Math.sqrt(Math.pow(moveX, 2) + Math.pow(moveY, 2));
+						
+						tempXMulti = moveX / (oldHypotenuse / Math.sqrt(Math.pow(newSlope, 2) + 1));
+						tempYMulti = moveY / (-oldHypotenuse / Math.sqrt(Math.pow(newSlope, 2) + 1)) * newSlope;
+						
+						moveX = -oldHypotenuse / Math.sqrt(Math.pow(newSlope, 2) + 1);
+						moveY = -moveX * newSlope;
+					}
+					
+					break;
+				case 8:
+					
+					if (moveX > 0) {
+						moveX *= -1;
+					}
+					
+					break;
 				}
-				blnCollide = true;
 				
-			} else if (ball.y <= wall.getY() && ball.x >= wall.getX() && ball.x <= (wall.getX() + wall.getWidth()) && Math.abs(wall.getY() - (ball.y)) <= radius) {
-				
-				if (blnCollide) {
-					sectorOfCollision = 2;
-				}
-				blnCollide = true;
-				
-			} else if (ball.y <= wall.getY() && ball.x >= (wall.getX() + wall.getWidth()) && Math.sqrt(Math.pow(wall.getY() - (ball.y), 2) + Math.pow((wall.getX() + wall.getWidth()) - (ball.x), 2)) <= radius) {
-				
-				if (blnCollide) {
-					sectorOfCollision = 3;
-				}
-				blnCollide = true;
-				
-			} else if (ball.y >= wall.getY() && ball.y <= (wall.getY() + wall.getHeight()) && ball.x >= (wall.getX() + wall.getWidth()) && Math.abs((wall.getX() + wall.getWidth()) - (ball.x)) <= radius) { 
-				
-				if (blnCollide) {
-					sectorOfCollision = 4;
-				}
-				blnCollide = true;
-				
-			} else if (ball.y >= (wall.getY() + wall.getHeight()) && ball.x >= (wall.getX() + wall.getWidth()) && Math.sqrt(Math.pow((wall.getY() + wall.getHeight()) - (ball.y), 2) + Math.pow((wall.getX() + wall.getWidth()) - (ball.x), 2)) <= radius) {
-				
-				if (blnCollide) {
-					sectorOfCollision = 5;
-				}
-				blnCollide = true;
-				
-			} else if (ball.y >= (wall.getY() + wall.getHeight()) && ball.x >= wall.getX() && ball.x <= (wall.getX() + wall.getWidth()) && Math.abs((wall.getY() + wall.getHeight()) - (ball.y)) <= radius) { 
-				
-				if (blnCollide) {
-					sectorOfCollision = 6;
-				}
-				blnCollide = true;
-				
-			} else if (ball.y >= (wall.getY() + wall.getHeight()) && ball.x <= wall.getX() && Math.sqrt(Math.pow((wall.getY() + wall.getHeight()) - (ball.y), 2) + Math.pow(wall.getX() - (ball.x), 2)) <= radius) {
-				
-				if (blnCollide) {
-					sectorOfCollision = 7;
-				}
-				blnCollide = true;
-				
-			} else if (ball.y >= wall.getY() && ball.y <= (wall.getY() + wall.getHeight()) && ball.x <= wall.getX() && Math.abs(wall.getX() - (ball.x)) <= radius) {
-				
-				if (blnCollide) {
-					sectorOfCollision = 8;
-				}
-				blnCollide = true;
-				
-			} else {
-				
-				blnCollide = false;
+				triedWall.resetSector();
 				
 			}
-			
-			return (blnCollide);
 		}
-	public boolean getColliding() {
-		return blnCollide;
-	}
-	public int getCollisionSector() {
-		return sectorOfCollision;
+		 
+		boolean win = false;
+		if (owfTrophy.isCollisionWall(new Point((int)(ball.getX() + radius), (int)(ball.getY() + radius)), (int)radius, (int)moveX, (int)moveY)) {
+			win = true;
+		}
+		
+		return win;
 	}
 	
-	public double getNewSlope(Point ball, int xMove, int yMove) {
+	public void updateMove(Point Finger) {
 		
-		double refinedSlope = 0;
+		moveX += ((double)ball.getX() - (double)Finger.x) / 50.0;
+		moveY += ((double)ball.getY() - (double)Finger.y) / 50.0;
+	}
+	
+	public void resetBall() {
 		
-			if (ball.x - (wall.getX() + wall.getWidth()) != 0 && xMove != 0) {
-				refinedSlope = ((yMove / xMove) - (2 * ((ball.y - (wall.getY() + wall.getHeight())) / (ball.x - (wall.getX() + wall.getWidth()))))) / 2;
-			}
+		moveX = 0;
+		moveY = 0;
+		
+		ball.setX(xSpawn);
+		ball.setY(ySpawn);
+	}
+	
+	public int getWidth() {
+		
+		int width = ball.getWidth();
+		
+		return width;
+	}
+	
+	public int getHeight() {
+		
+		int height = ball.getHeight();
+		
+		return height;
+	}
+	
+	public boolean isMoving() {
+		
+		boolean moving = true;
+		if ((int)moveX == 0 && (int)moveY == 0) {
+			moving = false;
+		}
+		
+		return moving;
+	}
+	
+	private void squareCollide() {
+		
+		if (ball.getX() + moveX < 5.0 || ball.getX() + moveX > screenSizeX - ball.getWidth() - 5) {
 			
-			sectorOfCollision = 0;
+			moveX *= -1;
 			
-		return refinedSlope;
-	}
-	
-	public double getTransfer(Point ball) {
+		}
 		
-		double dblRefinedSlope;
-		
-		dblRefinedSlope = 1 / ((ball.y - (wall.getY() + wall.getHeight())) / (ball.x - (wall.getX() + wall.getWidth())));
-		
-		return dblRefinedSlope;
-	}
-	
-	public void resetSector() {
-		sectorOfCollision = 0;
-	}
-
+		if (ball.getY() + moveY < 65.0 || ball.getY() + moveY > screenSizeY - ball.getHeight() - 5) {
+			
+			moveY *= -1;
+			
+		}	
+	}	
 }
