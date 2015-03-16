@@ -22,6 +22,16 @@ public class LevelDesign {
 			
 			owLevel = new ArrayList<Object_Wall>();
 			
+			/*
+			owLevel = new ArrayList<Object_Wall>();
+			
+			bsPlayer = new BallSprite(rLayout, context, 250, 250, 25, 1);
+
+			owLevel.add(new Object_Wall(0, 0, 200, 200, rLayout, context));
+			owLevel.add(new Object_Wall(0, 0, 100, 300, rLayout, context));
+			owLevel.add(new Object_Wall(0, 0, 300, 100, rLayout, context));
+			*/
+			
 			/**
 			bsPlayer = new BallSprite(rLayout, context, 250, 250, 10, 1);
 
