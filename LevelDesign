@@ -85,7 +85,8 @@ public class LevelDesign {
 			//Level 1 design
 		case 1:
 			//ball sprite locations
-			bsPlayer = new BallSprite(rLayout, context, 50, 320, 10, .99);
+			bsPlayer = new BallSprite(rLayout, context, 100, 320, 10, .99);
+			
 			//all collisions added
 			owLevel = new ArrayList<Object_Wall>();
 			
@@ -96,6 +97,50 @@ public class LevelDesign {
 			//Trophy
 			owfTrophy = new ObjectWallFinale(1000, 300, 50, 50, rLayout, context);
 			break;
+			//Level 2 design
+		case 2:
+			//ball sprite locations
+			bsPlayer = new BallSprite(rLayout, context, 100, 320, 10, .99);
+			
+			//all collisions added
+			owLevel = new ArrayList<Object_Wall>();
+			
+			//pillars
+			owLevel.add(new Object_Wall(525, 0, 150, 450, rLayout, context));
+		
+			//trophy
+			owfTrophy = new ObjectWallFinale(1100, 300, 50, 50, rLayout, context);
+		break;
+		//level 3
+		case 3:
+			//ball sprite locations
+			bsPlayer = new BallSprite(rLayout, context, 100, 320, 10, .99);
+			
+			//all collisions added
+			owLevel = new ArrayList<Object_Wall>();
+			
+			//pillars
+			owLevel.add(new Object_Wall(400, 0, 100, 350, rLayout, context));
+			owLevel.add(new Object_Wall(700, 282, 100, 400, rLayout, context));
+			
+			//trophy
+			owfTrophy = new ObjectWallFinale(1000, 300, 50, 50, rLayout, context);
+		break;
+		//level 4
+		case 4:
+			//ball sprite locations
+			bsPlayer = new BallSprite(rLayout, context, 100, 320, 10, .99);
+			
+			//all collisions added
+			owLevel = new ArrayList<Object_Wall>();
+			
+			//pillars
+			owLevel.add(new Object_Wall(550, 200, 75, 250, rLayout, context));
+			
+			//trophy
+			owfTrophy = new ObjectWallFinale(630, 320, 50, 50, rLayout, context);
+		break;
+			
 		}
 	}
 	
