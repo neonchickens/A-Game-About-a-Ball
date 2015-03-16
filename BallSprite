@@ -1,196 +1,135 @@
-package com.example.mobileapp;
+package com.example.workingwitheverything;
 
-import java.util.List;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Point;
-import android.view.Display;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
-public class BallSprite {
-	private double moveX = 0;
-	private double moveY = 0;
-	private double velocityDegrade;
-	private double radius;
-	private ImageView ball;
+public class Object_Wall {
 	
-	private double screenSizeX;
-	private double screenSizeY;
+	protected ImageView wall;
 	
-	private int xSpawn;
-	private int ySpawn;
+	private int xOffset = 5;
+	private int yOffset = 65;
 	
-	private int xOffset = 5, yOffset = 65;
+	private boolean blnCollide = false;
 	
-	private Display userDevice;
+	protected int sectorOfCollision = 0;
 	
-	public BallSprite(RelativeLayout rLayout, Context context, int xLoc, int yLoc, int tempRadius, double velocityDegradeTemp) {
+	public Object_Wall(int xLoc, int yLoc, int xSize, int ySize, RelativeLayout rLayout, Context context) {
 		
-		ball = new ImageView(context);
+		wall = new ImageView(context);
 		
-		radius = tempRadius;
+		ViewGroup.LayoutParams tempParam = new ViewGroup.LayoutParams(xSize, ySize);
+		wall.setLayoutParams(tempParam); 
 		
-		ViewGroup.LayoutParams tempParam = new ViewGroup.LayoutParams((int)(radius * 2), (int)(radius * 2));
-		ball.setLayoutParams(tempParam); 
+		rLayout.addView(wall);
 		
-		rLayout.addView(ball);
-		
-		ball.setImageResource(R.drawable.ball);
+		wall.setX(xLoc + xOffset);
+		wall.setY(yLoc + yOffset);
+		wall.setBackgroundColor(Color.rgb(250, 175, 75));
 
-		xSpawn = (xLoc + xOffset + (int)radius);
-		ySpawn = (yLoc + yOffset + (int)radius);
-		
-		ball.setX(xSpawn);
-		ball.setY(ySpawn);
-		
-		velocityDegrade = velocityDegradeTemp;
-		
-		WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-		userDevice = wm.getDefaultDisplay();
-		Point tempPoint = new Point();
-		userDevice.getSize(tempPoint);
-		
-		screenSizeX = tempPoint.x;
-		screenSizeY = tempPoint.y;
-		
 	}
 	
-	public void move() {
-		
-		ball.setX((float)(ball.getX() + moveX));
-		ball.setY((float)(ball.getY() + moveY));
-		
-		
-		
-		moveX *= velocityDegrade;
-		moveY *= velocityDegrade;
-	}
-	
-	public boolean isCollidingWall(List<Object_Wall> walls, ObjectWallFinale owfTrophy) {
-		
-		squareCollide();
-		Point pntTemp = new Point((int)(ball.getX() + radius), (int)(ball.getY() + radius));
-		for (Object_Wall triedWall: walls) {
-			if (triedWall.isCollisionWall(pntTemp, (int)radius, (int)moveX, (int)moveY)) {
+	public boolean isCollisionWall(Point ball, int radius, int xMove, int yMove) {
+
+			if (ball.y <= wall.getY() && ball.x <= wall.getX() && Math.sqrt(Math.pow(wall.getY() - (ball.y), 2) + Math.pow(wall.getX() - (ball.x), 2)) <= radius) {
 				
-				double moveTemp = 0.0;
-				switch (triedWall.getCollisionSector()) {
-				case 1:
-					
-					moveTemp = moveX;
-					moveX = -moveY;
-					moveY = -moveTemp;
-					
-					break;
-				case 2:
-					
-					moveY *= -1;
-					
-					break;
-				case 3:
-
-					moveTemp = moveX;
-					moveX = moveY;
-					moveY = moveTemp;
-					
-					break;
-				case 4:
-					
-					moveX *= -1;
-					
-					break;
-				case 5:
-
-					moveTemp = moveX;
-					moveX = -moveY;
-					moveY = -moveTemp;
-					
-					break;
-				case 6:
-					
-					moveY *= -1;
-					
-					break;
-				case 7:
-
-					moveTemp = moveX;
-					moveX = moveY;
-					moveY = moveTemp;
-					
-					break;
-				case 8:
-					
-					moveX *= -1;
-					
-					break;
+				if (blnCollide) {
+					sectorOfCollision = 1;
 				}
+				blnCollide = true;
 				
-				triedWall.resetSector();
+			} else if (ball.y <= wall.getY() && ball.x >= wall.getX() && ball.x <= (wall.getX() + wall.getWidth()) && Math.abs(wall.getY() - (ball.y)) <= radius) {
+				
+				if (blnCollide) {
+					sectorOfCollision = 2;
+				}
+				blnCollide = true;
+				
+			} else if (ball.y <= wall.getY() && ball.x >= (wall.getX() + wall.getWidth()) && Math.sqrt(Math.pow(wall.getY() - (ball.y), 2) + Math.pow((wall.getX() + wall.getWidth()) - (ball.x), 2)) <= radius) {
+				
+				if (blnCollide) {
+					sectorOfCollision = 3;
+				}
+				blnCollide = true;
+				
+			} else if (ball.y >= wall.getY() && ball.y <= (wall.getY() + wall.getHeight()) && ball.x >= (wall.getX() + wall.getWidth()) && Math.abs((wall.getX() + wall.getWidth()) - (ball.x)) <= radius) { 
+				
+				if (blnCollide) {
+					sectorOfCollision = 4;
+				}
+				blnCollide = true;
+				
+			} else if (ball.y >= (wall.getY() + wall.getHeight()) && ball.x >= (wall.getX() + wall.getWidth()) && Math.sqrt(Math.pow((wall.getY() + wall.getHeight()) - (ball.y), 2) + Math.pow((wall.getX() + wall.getWidth()) - (ball.x), 2)) <= radius) {
+				
+				if (blnCollide) {
+					sectorOfCollision = 5;
+				}
+				blnCollide = true;
+				
+			} else if (ball.y >= (wall.getY() + wall.getHeight()) && ball.x >= wall.getX() && ball.x <= (wall.getX() + wall.getWidth()) && Math.abs((wall.getY() + wall.getHeight()) - (ball.y)) <= radius) { 
+				
+				if (blnCollide) {
+					sectorOfCollision = 6;
+				}
+				blnCollide = true;
+				
+			} else if (ball.y >= (wall.getY() + wall.getHeight()) && ball.x <= wall.getX() && Math.sqrt(Math.pow((wall.getY() + wall.getHeight()) - (ball.y), 2) + Math.pow(wall.getX() - (ball.x), 2)) <= radius) {
+				
+				if (blnCollide) {
+					sectorOfCollision = 7;
+				}
+				blnCollide = true;
+				
+			} else if (ball.y >= wall.getY() && ball.y <= (wall.getY() + wall.getHeight()) && ball.x <= wall.getX() && Math.abs(wall.getX() - (ball.x)) <= radius) {
+				
+				if (blnCollide) {
+					sectorOfCollision = 8;
+				}
+				blnCollide = true;
+				
+			} else {
+				
+				blnCollide = false;
 				
 			}
-		}
-		 
-		boolean win = false;
-		if (owfTrophy.isCollisionWall(new Point((int)(ball.getX() + radius), (int)(ball.getY() + radius)), (int)radius, (int)moveX, (int)moveY)) {
-			win = true;
-		}
-		
-		return win;
-	}
-	
-	public void updateMove(Point Finger) {
-		
-		moveX += ((double)ball.getX() - (double)Finger.x) / 25.0;
-		moveY += ((double)ball.getY() - (double)Finger.y) / 25.0;
-	}
-	
-	public void resetBall() {
-		
-		moveX = 0;
-		moveY = 0;
-		
-		ball.setX(xSpawn);
-		ball.setY(ySpawn);
-	}
-	
-	public int getWidth() {
-		
-		int width = ball.getWidth();
-		
-		return width;
-	}
-	
-	public int getHeight() {
-		
-		int height = ball.getHeight();
-		
-		return height;
-	}
-	
-	public boolean isMoving() {
-		
-		boolean moving = true;
-		if ((int)moveX == 0 && (int)moveY == 0) {
-			moving = false;
-		}
-		
-		return moving;
-	}
-	
-	private void squareCollide() {
-		
-		if (ball.getX() + moveX < 5.0 || ball.getX() + moveX > screenSizeX - ball.getWidth() - 5) {
 			
-			moveX *= -1;
-			
+			return (blnCollide);
 		}
+	public boolean getColliding() {
+		return blnCollide;
+	}
+	public int getCollisionSector() {
+		return sectorOfCollision;
+	}
+	
+	public double getNewSlope(Point ball, int xMove, int yMove) {
 		
-		if (ball.getY() + moveY < 65.0 || ball.getY() + moveY > screenSizeY - ball.getHeight() - 5) {
+		double refinedSlope = 0;
+		
+			if (ball.x - (wall.getX() + wall.getWidth()) != 0 && xMove != 0) {
+				refinedSlope = ((yMove / xMove) - (2 * ((ball.y - (wall.getY() + wall.getHeight())) / (ball.x - (wall.getX() + wall.getWidth()))))) / 2;
+			}
 			
-			moveY *= -1;
+			sectorOfCollision = 0;
 			
-		}	
-	}	
+		return refinedSlope;
+	}
+	
+	public double getTransfer(Point ball) {
+		
+		double dblRefinedSlope;
+		
+		dblRefinedSlope = 1 / ((ball.y - (wall.getY() + wall.getHeight())) / (ball.x - (wall.getX() + wall.getWidth())));
+		
+		return dblRefinedSlope;
+	}
+	
+	public void resetSector() {
+		sectorOfCollision = 0;
+	}
+
 }
